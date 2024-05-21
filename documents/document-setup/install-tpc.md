@@ -1,34 +1,6 @@
-nodes:
-  # Wazuh indexer nodes
-  indexer:
-    - name: tpc-waz-index01
-      ip: "10.48.16.15"
-    - name: tpc-waz-index02
-      ip: "10.48.16.16"
-    #- name: node-3
-    #  ip: "<indexer-node-ip>"
+# Install wazuh clusters 
 
-  # Wazuh server nodes
-  # If there is more than one Wazuh server
-  # node, each one must have a node_type
-  server:
-    - name: tpc-waz-master01
-      ip: "10.48.16.18"
-      node_type: master
-    - name: tpc-waz-worker02
-      ip: "10.48.16.19"
-      node_type: worker
-    - name: tpchc-waz-worker03
-      ip: "10.32.192.10"
-      node_type: worker
-
-  # Wazuh dashboard nodes
-  dashboard:
-    - name: tpc-waz-dash01
-      ip: "10.48.16.11"
-    - name: tpc-waz-dash02
-      ip: "10.48.16.12"
-
+# Wazuh dashboard nodes
 
 | Wazuh Role  | IP Addres      | Hostname                 | vCPU    | RAM       | Disk  |
 |-------------| ---------------|--------------------------|---------|-----------|-------|
@@ -43,7 +15,7 @@ nodes:
 | ansible     | 10.32.192.9    | hc-waz-ansible           | 4vCPU   | 4G RAM    | 30G   |
 
 *** chuẩn bị các node theo cấu hình 
-    # update patch
+  # update patch
       apt update
 
     # resize disk all nodes
@@ -83,6 +55,7 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgl4Co26TD4HO+ag++Ktv90m2rQg+wdIBkuR
 chmod 600 /root/.ssh/authorized_keys
 ```
 ## 4. Set file hosts name and ip for ansible nodes
+```shell
 vim /etc/hosts
 
 10.48.16.11 tpc-waz-dash01
@@ -94,21 +67,24 @@ vim /etc/hosts
 10.32.192.10 tpchc-waz-worker03
 10.32.192.9 hc-waz-ansible
 10.48.16.10 tpc-waz-nginx
-
+```
 ## 5. Install certificate for all nodes
 
+```shell
 cd /opt/wazuh
 curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
 curl -sO https://packages.wazuh.com/4.7/config.yml
+```
 
-
+```shell
 
 vim config.yml
+
 ### content ##
 nodes:
   # Wazuh indexer nodes
   indexer:
-    - name: node-1
+    - name: node-1      # Importance hold node name equa with the certificate name of node sample: node-1.pem , node-1-key.pem
       ip: 10.48.16.15
     - name: node-2
       ip: 10.48.16.16
@@ -139,8 +115,19 @@ nodes:
   dashboard:
     - name: node-6
       ip: 10.48.16.11
-
+```
+# gen certificate for all nodes cluster
+```shell
+  cd /opt/wazuh
   bash wazuh-certs-tool.sh -A
+```
+# (option) advance certificate with exits Root CA
+
+```shell
+bash wazuh-certs-tool.sh -A /path/to/root-ca.pem /path/to/root-ca.key
+```
+[Wazuh Certificates deployment](https://documentation.wazuh.com/current/user-manual/manager/certificates.html)
+
 # ////
 
 # cp wazuh-certificates/*.* wazuh-ansible/indexer/certificates/
