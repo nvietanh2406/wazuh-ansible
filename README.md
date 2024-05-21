@@ -64,6 +64,12 @@ These playbooks install and configure Wazuh agent, manager and indexer and dashb
 - [Wazuh Ansible documentation](https://documentation.wazuh.com/current/deploying-with-ansible/index.html)
 - [Full documentation](http://documentation.wazuh.com)
 
+## Install Wazuh cluster (node)
+
+- [Wazuh install cluster ](https://github.com/nvietanh2406/wazuh-ansible/blob/main/documents/document-setup/install-tpc.md)
+- [Wazuh operation](http://documentation.wazuh.com)
+
+
 ## Directory structure
 
     ├── wazuh-ansible
