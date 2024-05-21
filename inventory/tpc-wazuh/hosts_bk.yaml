@@ -1,0 +1,25 @@
+### Inventory file
+
+#- The `ansible_host` variable should contain the `address/FQDN` used to gather facts and provision each node.
+#- The `private_ip` variable should contain the `address/FQDN` used for the internal cluster communications.
+#- Whether the environment is located in a local subnet, `ansible_host` and `private_ip` variables should match.
+#- The ssh credentials used by Ansible during the provision can be specified in this file too. Another option is including them directly on the playbook.
+
+#```ini
+tpc-waz-index01 ansible_host=10.48.16.15 private_ip=10.48.16.15 indexer_node_name=node-1
+tpc-waz-index02 ansible_host=10.48.16.16 private_ip=10.48.16.16 indexer_node_name=node-2
+tpc-waz-index03 ansible_host=10.48.16.17 private_ip=10.48.16.17 indexer_node_name=node-3
+tpc-waz-dash01  ansible_host=10.48.16.11 private_ip=10.48.16.11
+master ansible_host=10.48.16.18 private_ip=10.48.16.18
+worker02  ansible_host=10.48.16.19 private_ip=10.48.16.19
+worker03 ansible_host=10.32.192.10 private_ip=10.32.192.10
+
+[wi_cluster]
+tpc-waz-index01
+tpc-waz-index02
+tpc-waz-index03
+
+[all:vars]
+ansible_ssh_user=root
+ansible_ssh_private_key_file=/root/.ssh/id_rsa
+ansible_ssh_extra_args='-o StrictHostKeyChecking=no'

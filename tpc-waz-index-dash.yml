@@ -1,0 +1,218 @@
+---
+# Certificates generation
+    - hosts: tpc-waz-index01
+      roles:
+        - role: ../roles/wazuh/wazuh-indexer
+          indexer_network_host: "{{ private_ip }}"
+          indexer_cluster_nodes:
+              - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+          indexer_discovery_nodes:
+              - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+          perform_installation: false
+      become: no
+      vars:
+        indexer_node_master: true
+        instances:
+            node1:
+              name: node-1
+              ip: "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+              role: indexer
+            node2:
+              name: node-2
+              ip: "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+              role: indexer
+            node3:
+              name: node-3
+              ip: "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+              role: indexer
+            node4:
+              name: node-4
+              ip: "{{ hostvars['tpc-waz-master01']['private_ip'] }}"
+              role: wazuh
+              node_type: master
+            node5:
+              name: node-5
+              ip: "{{ hostvars['tpc-waz-worker02']['private_ip'] }}"
+              role: wazuh
+              node_type: worker
+            node6:
+              name: node-6
+              ip: "{{ hostvars['tpc-waz-dash01']['private_ip'] }}"
+              role: dashboard
+            node7:
+              name: node-7
+              ip: "{{ hostvars['tpchc-waz-worker03']['private_ip'] }}"
+              role: wazuh
+              node_type: worker
+      tags:
+        - generate-certs
+
+# Wazuh indexer cluster
+    - hosts: wi_cluster
+      strategy: free
+      roles:
+        - role: ../roles/wazuh/wazuh-indexer
+          indexer_network_host: "{{ private_ip }}"
+      become: yes
+      become_user: root
+      vars:
+        indexer_cluster_nodes:
+          - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+          - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+          - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+        indexer_discovery_nodes:
+          - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+          - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+          - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+        indexer_node_master: true
+        instances:
+            node1:
+              name: node-1
+              ip: "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+              role: indexer
+            node2:
+              name: node-2
+              ip: "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+              role: indexer
+            node3:
+              name: node-3
+              ip: "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+              role: indexer
+            node4:
+              name: node-4
+              ip: "{{ hostvars['tpc-waz-master01']['private_ip'] }}"
+              role: wazuh
+              node_type: master
+            node5:
+              name: node-5
+              ip: "{{ hostvars['tpc-waz-worker02']['private_ip'] }}"
+              role: wazuh
+              node_type: worker
+            node6:
+              name: node-6
+              ip: "{{ hostvars['tpc-waz-dash01']['private_ip'] }}"
+              role: dashboard
+            node7:
+              name: node-7
+              ip: "{{ hostvars['tpchc-waz-worker03']['private_ip'] }}"
+              role: wazuh
+              node_type: worker
+
+
+# Wazuh cluster
+    - hosts: manager
+      roles:
+        - role: "../roles/wazuh/ansible-wazuh-manager"
+        - role: "../roles/wazuh/ansible-filebeat-oss"
+          filebeat_node_name: node-4
+      become: yes
+      become_user: root
+      vars:
+        wazuh_manager_config:
+          connection:
+              - type: 'secure'
+                port: '1514'
+                protocol: 'tcp'
+                queue_size: 131072
+          api:
+              https: 'yes'
+          cluster:
+              disable: 'no'
+              node_name: 'tpc-waz-master01'
+              node_type: 'master'
+              key: 'c98b62a9b6169ac5f67dae55ae4a9088'
+              nodes:
+                  - "{{ hostvars['tpc-waz-master01']['private_ip'] }}"
+              hidden: 'no'
+        wazuh_api_users:
+          - username: custom-user
+            password: SecretPassword1!
+            #username: wazuh-admin
+            #password: FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLM
+        filebeat_output_indexer_hosts:
+              - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+
+    - hosts: worker02
+      roles:
+        - role: "../roles/wazuh/ansible-wazuh-manager"
+        - role: "../roles/wazuh/ansible-filebeat-oss"
+          filebeat_node_name: node-5
+      become: yes
+      become_user: root
+      vars:
+        wazuh_manager_config:
+          connection:
+              - type: 'secure'
+                port: '1514'
+                protocol: 'tcp'
+                queue_size: 131072
+          api:
+              https: 'yes'
+          cluster:
+              disable: 'no'
+              node_name: 'tpc-waz-worker02'
+              node_type: 'worker'
+              key: 'c98b62a9b6169ac5f67dae55ae4a9088'
+              nodes:
+                  - "{{ hostvars['tpc-waz-master01']['private_ip'] }}"
+              hidden: 'no'
+        filebeat_output_indexer_hosts:
+              - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+              - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+
+    - hosts: worker03
+      roles:
+        - role: "../roles/wazuh/ansible-wazuh-manager"
+        - role: "../roles/wazuh/ansible-filebeat-oss"
+          filebeat_node_name: node-7
+      become: yes
+      become_user: root
+      vars:
+        wazuh_manager_config:
+          connection:
+              - type: 'secure'
+                port: '1514'
+                protocol: 'tcp'
+                queue_size: 131072
+          api:
+              https: 'yes'
+          cluster:
+              disable: 'no'
+              node_name: 'tpchc-waz-worker03'
+              node_type: 'worker'
+              key: 'c98b62a9b6169ac5f67dae55ae4a9088'
+              nodes:
+                  - "{{ hostvars['tpc-waz-master01']['private_ip'] }}"
+              hidden: 'no'
+        filebeat_output_indexer_hosts:
+                - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+                - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+                - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+
+# Wazuh dashboard node
+    - hosts: dashboard
+      roles:
+        - role: "../roles/wazuh/wazuh-dashboard"
+      become: yes
+      become_user: root
+      vars:
+        indexer_network_host: "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+        indexer_cluster_nodes:
+                - "{{ hostvars['tpc-waz-index01']['private_ip'] }}"
+                - "{{ hostvars['tpc-waz-index02']['private_ip'] }}"
+                - "{{ hostvars['tpc-waz-index03']['private_ip'] }}"
+        dashboard_node_name: node-6
+        wazuh_api_credentials:
+          - id: default
+            url: https://{{ hostvars['tpc-waz-master01']['private_ip'] }}
+            port: 55000
+            username: custom-user
+            password: SecretPassword1!
+        ansible_shell_allow_world_readable_temp: true
