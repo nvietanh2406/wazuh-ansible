@@ -2,7 +2,7 @@
 
 # Wazuh dashboard nodes
 
-| Wazuh Role  | IP Addres      | Hostname                 | vCPU    | RAM       | Disk  |
+| Wazuh Role  | IP Addres      | Hostname                 | vCPU    | RAM       | Disk  |  
 |-------------| ---------------|--------------------------|---------|-----------|-------|
 | indexer     | 10.48.16.15    | tpc-waz-index01          | 8vCPU   | 12G RAM   | 100G  | 
 | indexer     | 10.48.16.16    | tpc-waz-index02	        | 8vCPU   | 12G RAM   | 100G  |
@@ -74,13 +74,11 @@ vim /etc/hosts
 cd /opt/wazuh
 curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
 curl -sO https://packages.wazuh.com/4.7/config.yml
-```
-
-```shell
-
 vim config.yml
-
-### content ##
+```
+# change content config.yml
+```shell
+### content config.yml ##
 nodes:
   # Wazuh indexer nodes
   indexer:
@@ -120,6 +118,10 @@ nodes:
 ```shell
   cd /opt/wazuh
   bash wazuh-certs-tool.sh -A
+
+  # cp wazuh-certificates/*.* wazuh-ansible/indexer/certificates/
+  mkdir wazuh-ansible/indexer/certificates/ -p
+  cp /opt/wazuh/wazuh-certificates /opt/wazuh/wazuh-ansible/indexer/certificates/ -r
 ```
 # (option) advance certificate with exits Root CA
 
@@ -130,9 +132,7 @@ bash wazuh-certs-tool.sh -A /path/to/root-ca.pem /path/to/root-ca.key
 
 # ////
 
-# cp wazuh-certificates/*.* wazuh-ansible/indexer/certificates/
-mkdir wazuh-ansible/indexer/certificates/ -p
-cp /opt/wazuh/wazuh-certificates /opt/wazuh/wazuh-ansible/indexer/certificates/ -r
+
 
 ## II. install ansible in hc-waz-ansible  
     # 1. install ansible
