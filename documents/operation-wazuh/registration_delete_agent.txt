@@ -1,0 +1,190 @@
+172.16.99.62
+ifconfig-push 172.16.99.62 255.255.255.0;
+
+
+IP VPN allowed: 172.16.99.62
+
+----Redis Prod ---
+10.0.129.62:6379
+pass: 82cf9fdd-9f4a-4a10-805a-8d953049b4bd
+----Mongo Prod --------------
+192.168.0.24:27017
+
+    user: "an.pham_read",
+    pwd: "37kY7sQ7ylqTwzrHwHB$dB#hjhpxl8", 
+    roles: [
+   { role: "read", db: "datx_portfolio_v2" }
+
+
+            username: wazuh-admin
+            password: FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI
+			
+curl -u wazuh-admin:FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI -k https://10.48.16.18:55000/
+
+curl -cert /root/waz_cer/wazuh-certificates/tpc-waz-dash01.pem -key /root/waz_cer/wazuh-certificates/tpc-waz-dash01-key.pem -u wazuh-admin:FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI https://10.48.16.18:55000
+
+curl --cert /root/waz_cer/wazuh-certificates/root-ca.pem --key /root/waz_cer/wazuh-certificates/root-ca.key -u wazuh-admin:FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI https://10.48.16.18:55000/
+
+curl -cert root-ca.pem -key root-ca.key -u wazuh-admin:FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI https://10.48.16.18:55000/
+
+curl --cert /root/waz_cer/wazuh-certificates/tpc-waz-dash01.pem --key /root/waz_cer/wazuh-certificates/tpc-waz-dash01-key.pem -u wazuh-admin:FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI -k https://10.48.16.18:55000/
+
+---------
+curl -cert /root/waz_cer/wazuh-certificates/tpc-waz-dash01.pem -key /root/waz_cer/wazuh-certificates/tpc-waz-dash01-key.pem -u wazuh:wazuh https://10.48.16.18:55000
+
+curl -cert "/root/waz_cer/wazuh-certificates/root-ca.pem" -key "/root/waz_cer/wazuh-certificates/root-ca.key" -u wazuh-admin:FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI https://10.48.16.18:55000
+
+---- OK ---
+curl -u wazuh-admin:FQJNbk89txG#@^GIKMwLkF8twxnAW%81#eP6hGKXR$bKO@tLMI -k -X GET "https://10.48.16.18:55000/security/user/authenticate?raw=true"
+
+
+curl -u wazuh:wazuh -k -X GET "https://10.48.16.18:55000/security/user/authenticate?raw=true"
+
+
+curl -u custom-user:SecretPassword1! -k -X GET "https://10.48.16.18:55000/security/user/authenticate?raw=true"
+
+
+
+
+
+
+TOKEN="eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3YXp1aCIsImF1ZCI6IldhenVoIEFQSSBSRVNUIiwibmJmIjoxNzE1OTE5NTA0LCJleHAiOjE3MTU5MjA0MDQsInN1YiI6IndhenVoIiwicnVuX2FzIjpmYWxzZSwicmJhY19yb2xlcyI6WzFdLCJyYmFjX21vZGUiOiJ3aGl0ZSJ9.AJ7cj-sX4YKuj5vGy7Ofd5cD_0DhZsVlSXpB8TwTncUV4NvWslbrO0TIr_s4YBL5r-eB2HIU4dDzu1R8z6UTJdPBAZit0qFTCk8xq-6nhrRRjj5zlFH54p-YuzTTF9c7IwOzLNJfSXRkpfdeyhHheQWxJpTp8nYS05mgVCvIqKiSssf_root@tpc-waz-dash01:~/waz_"
+
+curl -cert /root/waz_cer/wazuh-certificates/tpc-waz-dash01.pem -key /root/waz_cer/wazuh-certificates/tpc-waz-dash01-key.pem -H "Authorization: Bearer $TOKEN" https://10.48.16.18:55000/
+
+
+
+TOKEN="eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3YXp1aCIsImF1ZCI6IldhenVoIEFQSSBSRVNUIiwibmJmIjoxNzE2MTMxNTY0LCJleHAiOjE3MTYxMzI0NjQsInN1YiI6ImN1c3RvbS11c2VyIiwicnVuX2FzIjpmYWxzZSwicmJhY19yb2xlcyI6WzFdLCJyYmFjX21vZGUiOiJ3aGl0ZSJ9.APdqBi9gzBkRNQtzwolvYOwSEd62UXIjY-nDmQZpmHErCj9kAnzc7vG0PXG7jpp4nRs0Zx9dymASWMsWzV5sfkLfAAlJsrtJbCp33K7J_kxKpU84d2dB0rgb7GWsR473gF7t2sR3mE4QE6kt6mVhViFT7ACk_Izu446m-2ZGcv2qvPDrroot@tpc-waz-master01"
+
+curl -k -X GET "https://localhost:55000/cluster/nodes?pretty=true" -H  "Authorization: Bearer $TOKEN"
+
+curl -cert /var/ossec/etc/sslmanager.cert -key /var/ossec/etc/sslmanager.key -H "Authorization: Bearer $TOKEN" https://10.48.16.18:55000/
+
+
+----install --
+
+
+      ansible-playbook \
+    -i inventory/tpc-wazuh/hosts.yaml \
+    --become \
+    --become-user=root \
+    tpc-waz-index-dash.yml
+
+--- Test api --
+
+curl -k -X GET "https://10.48.16.18:55000/" -H "Authorization: Bearer $(curl -u custom-user:SecretPassword1! -k -X POST 'https://10.48.16.18:55000/security/user/authenticate?raw=true')"
+
+indexer_admin_password: changeme
+dashboard_password: changeme
+
+curl https://10.48.16.15:9200/_cat/indices/wazuh-alerts-* -u kibanaserver:changeme -k
+
+--- check all node index health
+
+curl -k -u kibanaserver:changeme  https://10.48.16.15:9200/_cat/nodes?v
+
+run on worker
+filebeat test output
+
+curl https://<WAZUH_INDEXER_IP>:9200/.kibana*/_mapping/field/type?pretty -u <wazuh_indexer_user>:<wazuh_indexer_password> -k
+
+--- agent load balancer
+
+wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='10.48.16.10' WAZUH_AGENT_GROUP='tpc-dev-48.15' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
+
+
+
+apt remove wazuh-agent -y
+wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='10.48.16.10' WAZUH_AGENT_GROUP='cmc-prod-168.2' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
+sed -i 's/MANAGER_IP/10.48.16.10/g' /var/ossec/etc/ossec.conf
+systemctl restart wazuh-agent
+systemctl enable wazuh-agent
+
+curl -k -X GET "https://10.48.16.18:55000/" -H "Authorization: Bearer $(curl -u custom-user:SecretPassword1! -k -X POST 'https://10.48.16.18:55000/security/user/authenticate?raw=true')"
+
+
+------delete agent duplicate
+curl -k -X DELETE "https://10.48.16.18:55000/agents?pretty=true&older_than=0s&agents_list=007&status=all" -H  "Authorization: Bearer $(curl -u custom-user:SecretPassword1! -k -X POST 'https://10.48.16.18:55000/security/user/authenticate?raw=true')"
+
+------Check logs
+tail -f /var/ossec/logs/ossec.log
+
+--- check worker master cluster all 
+/var/ossec/bin/cluster_control -i
+
+--- Check all agent
+/var/ossec/bin/cluster_control -a
+
+
+---install agent HC
+Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.7.4-1.msi -OutFile ${env.tmp}\wazuh-agent; msiexec.exe /i ${env.tmp}\wazuh-agent /q WAZUH_MANAGER='10.32.192.10' WAZUH_AGENT_GROUP='hc-server-windows,default' WAZUH_REGISTRATION_SERVER='10.48.16.18'
+NET START WazuhSvc
+
+--- linux
+
+curl -o wazuh-agent-4.7.4-1.x86_64.rpm https://packages.wazuh.com/4.x/yum/wazuh-agent-4.7.4-1.x86_64.rpm && sudo WAZUH_MANAGER='10.48.16.10' WAZUH_AGENT_GROUP='default' WAZUH_AGENT_NAME='tpc-eng-rnd-prod-05' rpm -ihv wazuh-agent-4.7.4-1.x86_64.rpm WAZUH_REGISTRATION_SERVER='10.48.16.18'
+
+sudo wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='10.48.16.10' WAZUH_AGENT_GROUP='default' WAZUH_REGISTRATION_SERVER='10.48.16.18' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb 
+
+
+sudo wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='10.48.16.10' WAZUH_AGENT_GROUP='default' WAZUH_REGISTRATION_SERVER='10.48.16.18' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb 
+
+sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+sudo systemctl restart wazuh-agent
+sudo systemctl status wazuh-agent
+
+## config HA proxy TPC 10.48.15.100
+ssh 10.48.15.100
+cd /etc/nginx/conf.d
+touch dev-upstream-wazuh-agent.conf
+vim dev-upstream-wazuh-agent.conf
+
+upstream cluster {
+        hash $remote_addr consistent;
+        server 10.48.16.18:1514;
+        server 10.48.16.19:1514;
+}
+upstream master {
+        server 10.48.16.18:1515;
+}
+server {
+        listen 1514;
+        proxy_pass cluster;
+}
+server {
+        listen 1515;
+        proxy_pass master;
+    }
+}
+
+stream {
+    upstream cluster {
+        hash $remote_addr consistent;
+        server 10.48.16.18:1514;
+        server 10.48.16.19:1514;
+    }
+    upstream master {
+        server 10.48.16.18:1515;
+    }
+    server {
+        listen 1514;
+        proxy_pass cluster;
+    }
+    server {
+        listen 1515;
+        proxy_pass master;
+    }
+}
+
+
+systemctl restart nginx
+
+time cd /data/ && systemctl stop kafka.service && zip -r kafka_data_$(date +%Y-%m-%d_%Hh%Mm).zip kafka/ && systemctl start kafka.service
+admin
+dzkuTvXtvcVJPXx43sp2MSfbPeSgQsLN
+
+
+mongodb://talend:asesSKEESb6oshU7jqn5GI0K@192.168.0.22:27017,192.168.0.23:27017,192.168.0.24:27017/admin?replicaSet=datxRS0&readPreference=primary
+

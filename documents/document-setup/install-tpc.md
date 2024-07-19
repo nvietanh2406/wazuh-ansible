@@ -297,7 +297,7 @@ vim playbooks/wazuh-indexer-and-dashboard.yml
 ##Switch to the playbooks folder on the Ansible server and proceed to run the command below:
 
 
-      ansible-playbook wazuh-indexer-and-dashboard.yml -b -K
+    ansible-playbook wazuh-indexer-and-dashboard.yml -b -K
 
       ansible-playbook \
     -i inventory/tpc-wazuh/hosts.yaml \
